@@ -1,19 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
-require('dotenv').config();
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-const PROD = process.env.NODE_ENV === 'production';
-
-let plugins = [];
-
-PROD ? [
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false }
-    }))
-  ] : '';
 
 module.exports = {
-    mode: process.env.NODE_ENV, // 실서비스 : produxtion
+    mode: 'production', // 실서비스 : produxtion
     devtool: 'eval-source-map',  // 빠르게 + produxtion 아님
     resolve: {
         modules: ['node_modules'],  // 생략가능
@@ -40,11 +31,17 @@ module.exports = {
     },
 
     output: {
-        library: process.env.NAME,
-        libraryTarget: process.env.TARGET,
+        library: 'basicCarousel',
+        libraryTarget: 'umd',
         path: __dirname,
-        filename: (PROD) ? 'dist/carousel.min.js' : 'dist/carousel.js'
+        filename: 'dist/carousel.min.js'
     },
 
-    plugins: plugins,
+    optimization: {
+        minimizer: [
+          new UglifyJsPlugin({
+            sourceMap: true,
+          }),
+        ],
+    },
 }
