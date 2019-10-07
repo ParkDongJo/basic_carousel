@@ -1,0 +1,6 @@
+lib
+test
+webpack.config.js
+.evn
+.babelrc
+.eslintrc.js
